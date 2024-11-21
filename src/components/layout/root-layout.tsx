@@ -22,9 +22,11 @@ const RootLayout = ({ allowedRoles }: Props) => {
   }
 
   return (
-    <div>
+    <div className='flex'>
       <Navbar />
-      <Outlet />
+      <div className='ml-20 flex-1'>
+        <Outlet />
+      </div>
     </div>
   )
 }

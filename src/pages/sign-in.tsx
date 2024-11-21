@@ -2,12 +2,17 @@ import { useState } from 'react'
 import InputText from '../components/input-text/input-text'
 import Button from '../components/button/button'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../utils/auth-context'
 
 const SignIn = () => {
+  const { setToken } = useAuth()
   const [username, setUsername] = useState<string>('')
   const [isUsernameValid, setIsUsernameValid] = useState<boolean>(false)
   const [password, setPassword] = useState<string>('')
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false)
+
+  const navigate = useNavigate()
 
   const loginUser = async () => {
     try {
@@ -17,6 +22,8 @@ const SignIn = () => {
       })
 
       localStorage.setItem('token', response.data)
+      setToken(response.data)
+      navigate('/')
     } catch (error) {
       console.error('Login error:', error)
     }
@@ -24,6 +31,7 @@ const SignIn = () => {
 
   return (
     <div>
+      <h1>Anmeldung</h1>
       <InputText
         label='Nutzername'
         required={true}
@@ -42,7 +50,7 @@ const SignIn = () => {
         onClick={loginUser}
         disabled={!isPasswordValid && !isUsernameValid}
       >
-        Sign in
+        Anmelden
       </Button>
     </div>
   )

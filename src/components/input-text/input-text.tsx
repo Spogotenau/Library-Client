@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
+import { Text } from '../text/text'
 
 interface Props {
   label: string
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const InputText = (props: Props) => {
-  const [error, setError] = useState<string>('')
+  const [error, setError] = useState<string | null>(null)
   const [hastInteracted, setHasInteracted] = useState<boolean>(false)
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +26,7 @@ const InputText = (props: Props) => {
 
     if (props.value === '') {
       if (props.required) {
-        setError('DiesesFeld wird benötigt')
+        setError('Dieses Feld wird benötigt')
         props.setValid(false)
         return
       }
@@ -37,18 +38,20 @@ const InputText = (props: Props) => {
       return
     }
 
-    setError('')
+    setError(null)
     props.setValid(true)
   }, [props.value])
 
   return (
     <div>
       <div>
-        <p>{props.label + (props.required ? '*' : '')}</p>
+        <Text className='text-sm'>
+          {props.label + (props.required ? '*' : '')}
+        </Text>
         {props.characters ? (
-          <p>
+          <Text className='text-sm'>
             {props.value?.length || 0}/{props.characters}
-          </p>
+          </Text>
         ) : (
           ''
         )}
@@ -61,6 +64,7 @@ const InputText = (props: Props) => {
         type='text'
         placeholder={props.placeholder}
       />
+      <Text className='text-red-500 text-sm'>{error}</Text>
     </div>
   )
 }
