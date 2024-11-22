@@ -32,7 +32,7 @@ const SignUp = () => {
     <div className='min-h-screen w-full flex items-center justify-center'>
       <div className='w-96'>
         <div className='space-y-4'>
-          <Text className='text-3xl'>Registrierung</Text>
+          <Text className='text-3xl font-semibold'>Registrierung</Text>
           <InputText
             label='Nutzername'
             required={true}
@@ -53,7 +53,7 @@ const SignUp = () => {
             onClick={signUp}
             disabled={!isPasswordValid && !isUsernameValid}
           >
-            Anmelden
+            Konto ertellen
           </Button>
         </div>
       </div>

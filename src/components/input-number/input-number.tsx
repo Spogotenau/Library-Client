@@ -1,11 +1,12 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, useEffect } from 'react'
 import { Text } from '../text/text'
 
 type Props = {
   label: string
   required: boolean
-  value: number
+  value: number | undefined
   onChange: (value: number) => void
+  setValid: (value: boolean) => void
   placeholder?: string
   disabled?: boolean
 }
@@ -15,6 +16,7 @@ export const InputNumber: React.FC<Props> = ({
   required,
   value,
   onChange,
+  setValid,
   placeholder,
   disabled,
 }) => {
@@ -23,11 +25,6 @@ export const InputNumber: React.FC<Props> = ({
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value === '' ? 0 : Number(event.target.value)
-    if (isNaN(newValue)) {
-      setError('Ungültige Eingabe')
-      return
-    }
-    setError(null)
     onChange(newValue)
     setHasInteracted(true)
   }
@@ -42,6 +39,19 @@ export const InputNumber: React.FC<Props> = ({
       event.preventDefault()
     }
   }
+
+  useEffect(() => {
+    if (!hasInteracted) return
+    console.log('test')
+
+    if (required && (value === undefined || value === 0)) {
+      setError('Dieses Feld wird benötigt')
+      return
+    }
+
+    setError(null)
+    setValid(true)
+  }, [value, required, hasInteracted, setValid])
 
   return (
     <div>

@@ -7,7 +7,7 @@ import { useAuth } from '../utils/auth-context'
 import { Text } from '../components/text/text'
 
 const SignIn = () => {
-  const { setToken } = useAuth()
+  const { setCurrentUser } = useAuth()
   const [username, setUsername] = useState<string>('')
   const [isUsernameValid, setIsUsernameValid] = useState<boolean>(false)
   const [password, setPassword] = useState<string>('')
@@ -23,7 +23,7 @@ const SignIn = () => {
       })
 
       localStorage.setItem('token', response.data)
-      setToken(response.data)
+      setCurrentUser(response.data)
       navigate('/')
     } catch (error) {
       console.error('Login error:', error)
@@ -34,7 +34,7 @@ const SignIn = () => {
     <div className='min-h-screen w-full flex items-center justify-center'>
       <div className='w-96'>
         <div className='space-y-4'>
-          <Text className='text-3xl'>Anmeldung</Text>
+          <Text className='text-3xl font-semibold'>Anmeldung</Text>
           <InputText
             label='Nutzername'
             required={true}

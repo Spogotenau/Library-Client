@@ -1,6 +1,7 @@
 import {
   faBook,
   faCircleUser,
+  faGear,
   faHouse,
   faRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons'
@@ -12,7 +13,7 @@ import { Text } from '../text/text'
 import { useState } from 'react'
 
 const Navbar = () => {
-  const { user, logout } = useAuth()
+  const { user, role, logout } = useAuth()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const toggleModal = () => {
@@ -20,7 +21,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className='group fixed h-full w-16 bg-purple-900 text-blue-200 hover:w-40 transition-[width] duration-300 ease-in-out'>
+    <div className='group fixed h-full w-16 bg-purple-900 text-blue-200 hover:w-48 transition-[width] duration-300 ease-in-out'>
       <div className='flex flex-col justify-between p-3 h-full'>
         <div className='flex flex-col gap-32'>
           <div className='flex justify-center'>
@@ -51,6 +52,20 @@ const Navbar = () => {
                 Profile
               </Link>
             </div>
+            {role === 'ROLE_ADMIN' && (
+              <div className='flex items-center gap-4'>
+                <FontAwesomeIcon
+                  icon={faGear}
+                  className='text-3xl min-w-[40px] text-center'
+                />
+                <Link
+                  to={'/settings'}
+                  className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out text-lg hover:underline whitespace-nowrap overflow-hidden'
+                >
+                  Einstellungen
+                </Link>
+              </div>
+            )}
           </div>
         </div>
         <div className='flex items-center gap-4'>
@@ -62,7 +77,7 @@ const Navbar = () => {
             onClick={toggleModal}
             className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out text-lg hover:underline hover:cursor-pointer whitespace-nowrap overflow-hidden'
           >
-            Logout
+            Abmelden
           </span>
         </div>
       </div>

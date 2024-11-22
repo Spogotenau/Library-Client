@@ -4,7 +4,7 @@ import { Text } from '../text/text'
 interface Props {
   label: string
   required: boolean
-  value: string
+  value: string | undefined
   onChange: (value: string) => void
   setValid: (value: boolean) => void
   placeholder?: string
@@ -14,7 +14,7 @@ interface Props {
 
 const InputText = (props: Props) => {
   const [error, setError] = useState<string | null>(null)
-  const [hastInteracted, setHasInteracted] = useState<boolean>(false)
+  const [hasInteracted, setHasInteracted] = useState<boolean>(false)
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     props.onChange(event.target.value)
@@ -22,25 +22,31 @@ const InputText = (props: Props) => {
   }
 
   useEffect(() => {
-    if (!hastInteracted) return
+    if (!hasInteracted) return
 
-    if (props.value === '') {
-      if (props.required) {
-        setError('Dieses Feld wird benötigt')
-        props.setValid(false)
-        return
-      }
+    const valueLength = props.value?.length || 0
+
+    if (props.required && (!props.value || props.value === '')) {
+      setError('Dieses Feld wird benötigt')
+      props.setValid(false)
+      return
     }
 
-    if (props.characters && props.value.length > props.characters) {
-      setError('Text ist zu lange')
+    if (props.characters && valueLength > props.characters) {
+      setError(`Maximal ${props.characters} Zeichen erlaubt`)
       props.setValid(false)
       return
     }
 
     setError(null)
     props.setValid(true)
-  }, [props.value])
+  }, [
+    props.value,
+    props.required,
+    props.characters,
+    hasInteracted,
+    props.setValid,
+  ])
 
   return (
     <div>

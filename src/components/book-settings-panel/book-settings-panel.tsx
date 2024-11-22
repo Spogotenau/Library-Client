@@ -3,7 +3,7 @@ import { BookResponse } from '../../interfaces/responses/book-response'
 import Button from '../button/button'
 import { Text } from '../text/text'
 import Modal from '../modal/modal'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../utils/auth-context'
 import axios, { AxiosError } from 'axios'
 import InputText from '../input-text/input-text'
@@ -26,8 +26,15 @@ export const BookSettingsPanel: React.FC<Props> = ({ book }) => {
   const [author, setAuthor] = useState<string>(book.author)
   const [isAuthorValid, setIsAuthorValid] = useState<boolean>(true)
   const [pages, setPages] = useState<number>(book.pages)
+  const [isPagesValid, setIsPagesValid] = useState<boolean>(true)
 
   const toggleEditModal = () => {
+    if (isEditModalOpen) {
+      setTitle(book.title)
+      setAuthor(book.author)
+      setPages(book.pages)
+    }
+
     setIsEditModalOpen(!isEditModalOpen)
   }
 
@@ -99,12 +106,12 @@ export const BookSettingsPanel: React.FC<Props> = ({ book }) => {
 
   return (
     <div className='flex justify-between items-center m-2 p-2 rounded-md border border-blue-200 bg-blue-200 hover:border-blue-100 hover:outline-none hover:ring-2 hover:ring-blue-100 hover:ring-opacity-50'>
-      <Text
-        className='text-lg hover:underline hover:cursor-pointer'
-        onClick={() => navigate(`/library/book/${book.id}`)}
+      <Link
+        className='text-lg text-purple-900  hover:underline hover:cursor-pointer'
+        to={`/library/book/${book.id}`}
       >
         {book.title}
-      </Text>
+      </Link>
       <div className='flex gap-4'>
         <Button onClick={toggleEditModal} styling='secondary'>
           Bearbeiten
@@ -142,8 +149,9 @@ export const BookSettingsPanel: React.FC<Props> = ({ book }) => {
           required={true}
           value={pages}
           onChange={setPages}
+          setValid={setIsPagesValid}
         />
-        {deleteError ? (
+        {editError ? (
           <Text className='text-red-500 text-sm'>{editError}</Text>
         ) : (
           ''

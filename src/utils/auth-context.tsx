@@ -7,7 +7,7 @@ interface AuthContextType {
   token: string | null
   user: string | null
   loading: boolean
-  setToken: (token: string | null) => void
+  setCurrentUser: (token: string | null) => void
   logout: () => void
 }
 
@@ -21,9 +21,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const navigate = useNavigate()
 
+  const setCurrentUser = (resToken: string | null) => {
+    if (resToken) {
+      try {
+        const decodedToken: { role: string; sub: string } = jwtDecode(resToken)
+
+        setToken(resToken)
+        setRole(decodedToken.role)
+        setUser(decodedToken.sub)
+      } catch (error) {
+        console.error('Invalid token:', error)
+      }
+    }
+  }
+
   const logout = () => {
     localStorage.removeItem('token')
-    setToken(null) // Token und zugehörige Daten zurücksetzen
+    setToken(null)
+    setRole(null)
+    setUser(null)
     navigate('/signin')
   }
 
@@ -32,8 +48,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const storedToken = localStorage.getItem('token')
       if (storedToken) {
         try {
-          const decodedToken: { role: string; sub: string } =
+          const decodedToken: { role: string; sub: string; exp: number } =
             jwtDecode(storedToken)
+
+          if (decodedToken.exp * 1000 < Date.now()) {
+            logout()
+            return
+          }
+
           setToken(storedToken)
           setRole(decodedToken.role)
           setUser(decodedToken.sub)
@@ -49,7 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ role, token, user, loading, setToken, logout }}
+      value={{ role, token, user, loading, setCurrentUser, logout }}
     >
       {children}
     </AuthContext.Provider>
