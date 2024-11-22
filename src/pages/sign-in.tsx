@@ -2,8 +2,9 @@ import { useState } from 'react'
 import InputText from '../components/input-text/input-text'
 import Button from '../components/button/button'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/auth-context'
+import { Text } from '../components/text/text'
 
 const SignIn = () => {
   const { setToken } = useAuth()
@@ -30,28 +31,40 @@ const SignIn = () => {
   }
 
   return (
-    <div>
-      <h1>Anmeldung</h1>
-      <InputText
-        label='Nutzername'
-        required={true}
-        value={username}
-        onChange={setUsername}
-        setValid={setIsUsernameValid}
-      />
-      <InputText
-        label='Passwort'
-        required={true}
-        value={password}
-        onChange={setPassword}
-        setValid={setIsPasswordValid}
-      />
-      <Button
-        onClick={loginUser}
-        disabled={!isPasswordValid && !isUsernameValid}
-      >
-        Anmelden
-      </Button>
+    <div className='min-h-screen w-full flex items-center justify-center'>
+      <div className='w-96'>
+        <div className='space-y-4'>
+          <Text className='text-3xl'>Anmeldung</Text>
+          <InputText
+            label='Nutzername'
+            required={true}
+            value={username}
+            onChange={setUsername}
+            setValid={setIsUsernameValid}
+          />
+          <InputText
+            label='Passwort'
+            required={true}
+            value={password}
+            onChange={setPassword}
+            setValid={setIsPasswordValid}
+          />
+        </div>
+        <div className='mt-4 flex justify-between'>
+          <Button
+            onClick={loginUser}
+            disabled={!isPasswordValid && !isUsernameValid}
+          >
+            Anmelden
+          </Button>
+          <Link
+            className='text-purple-900 hover:cursor-pointer hover:underline'
+            to={'/signup'}
+          >
+            Noch kein Konto?
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }

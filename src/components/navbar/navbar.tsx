@@ -20,30 +20,33 @@ const Navbar = () => {
   }
 
   return (
-    <div className='group fixed h-full bg-purple-900 text-blue-200 transition-all duration-1000 ease-in-out'>
-      <div className='flex flex-col justify-between p-4 h-full'>
+    <div className='group fixed h-full w-16 bg-purple-900 text-blue-200 hover:w-40 transition-[width] duration-300 ease-in-out'>
+      <div className='flex flex-col justify-between p-3 h-full'>
         <div className='flex flex-col gap-32'>
-          <FontAwesomeIcon icon={faBook} className='text-3xl' />
+          <div className='flex justify-center'>
+            <FontAwesomeIcon icon={faBook} className='text-3xl' />
+          </div>
           <div className='flex flex-col gap-6'>
             <div className='flex items-center gap-4'>
-              <div className='flex flex-col items-center w-10'>
-                <FontAwesomeIcon icon={faHouse} className='text-3xl' />
-              </div>
-
+              <FontAwesomeIcon
+                icon={faHouse}
+                className='text-3xl min-w-[40px] text-center'
+              />
               <Link
                 to={'/library'}
-                className='hidden group-hover:inline text-lg hover:underline'
+                className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out text-lg hover:underline whitespace-nowrap overflow-hidden'
               >
                 Home
               </Link>
             </div>
             <div className='flex items-center gap-4'>
-              <div className='flex flex-col items-center w-10'>
-                <FontAwesomeIcon icon={faCircleUser} className='text-3xl' />
-              </div>
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                className='text-3xl min-w-[40px] text-center'
+              />
               <Link
                 to={`/library/user/${user}`}
-                className='hidden group-hover:inline text-lg hover:underline'
+                className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out text-lg hover:underline whitespace-nowrap overflow-hidden'
               >
                 Profile
               </Link>
@@ -51,12 +54,13 @@ const Navbar = () => {
           </div>
         </div>
         <div className='flex items-center gap-4'>
-          <div className='flex flex-col items-center w-10'>
-            <FontAwesomeIcon icon={faRightFromBracket} className='text-3xl' />
-          </div>
+          <FontAwesomeIcon
+            icon={faRightFromBracket}
+            className='text-3xl min-w-[40px] text-center'
+          />
           <span
             onClick={toggleModal}
-            className='hidden group-hover:inline text-lg hover:underline hover:cursor-pointer'
+            className='opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out text-lg hover:underline hover:cursor-pointer whitespace-nowrap overflow-hidden'
           >
             Logout
           </span>

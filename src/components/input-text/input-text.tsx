@@ -44,12 +44,10 @@ const InputText = (props: Props) => {
 
   return (
     <div>
-      <div>
-        <Text className='text-sm'>
-          {props.label + (props.required ? '*' : '')}
-        </Text>
+      <div className='m-1'>
+        <Text>{props.label + (props.required ? '*' : '')}</Text>
         {props.characters ? (
-          <Text className='text-sm'>
+          <Text>
             {props.value?.length || 0}/{props.characters}
           </Text>
         ) : (
@@ -63,6 +61,7 @@ const InputText = (props: Props) => {
         required={props.required}
         type='text'
         placeholder={props.placeholder}
+        className='px-2 py-3 bg-blue-200 border border-purple-900 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-purple-900 focus:border-purple-900'
       />
       <Text className='text-red-500 text-sm'>{error}</Text>
     </div>

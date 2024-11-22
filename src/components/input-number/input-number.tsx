@@ -45,8 +45,8 @@ export const InputNumber: React.FC<Props> = ({
 
   return (
     <div>
-      <div>
-        <Text className='text-sm'>{label + (required ? '*' : '')}</Text>
+      <div className='m-1'>
+        <Text>{label + (required ? '*' : '')}</Text>
       </div>
       <input
         onChange={handleOnChange}
@@ -56,6 +56,7 @@ export const InputNumber: React.FC<Props> = ({
         required={required}
         type='number'
         placeholder={placeholder}
+        className='px-2 py-3 bg-blue-200 border border-purple-900 rounded-md w-full no-spinner focus:outline-none focus:ring-2 focus:ring-purple-900 focus:border-purple-900'
       />
       <Text className='text-red-500 text-sm'>{error}</Text>
     </div>
