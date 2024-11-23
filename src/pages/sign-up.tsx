@@ -1,8 +1,8 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useState } from 'react'
 import Button from '../components/button/button'
 import InputText from '../components/input-text/input-text'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Text } from '../components/text/text'
 
 const SignUp = () => {
@@ -10,6 +10,7 @@ const SignUp = () => {
   const [isUsernameValid, setIsUsernameValid] = useState<boolean>(false)
   const [password, setPassword] = useState<string>('')
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   const navigate = useNavigate()
 
@@ -23,8 +24,17 @@ const SignUp = () => {
       if (response.status === 200) {
         navigate('/signin')
       }
-    } catch (error) {
-      console.error('Login error:', error)
+    } catch (err) {
+      const axiosError = err as AxiosError
+      if (axiosError.response) {
+        if (axiosError.response.status === 409) {
+          setError('Nutzername ist schon vergeben')
+        } else {
+          setError('Registrierung fehlgeschlagen')
+        }
+      } else {
+        setError('Network error or no response received')
+      }
     }
   }
 
@@ -44,10 +54,12 @@ const SignUp = () => {
             label='Passwort'
             required={true}
             value={password}
+            password={true}
             onChange={setPassword}
             setValid={setIsPasswordValid}
           />
         </div>
+        <Text className='text-red-500 font-semibold'>{error}</Text>
         <div className='mt-4 flex justify-between '>
           <Button
             onClick={signUp}
@@ -55,6 +67,12 @@ const SignUp = () => {
           >
             Konto ertellen
           </Button>
+          <Link
+            className='text-purple-900 hover:cursor-pointer hover:underline'
+            to={'/signin'}
+          >
+            Bei Konto anmelden?
+          </Link>
         </div>
       </div>
     </div>

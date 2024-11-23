@@ -8,14 +8,13 @@ import Unauthorized from './pages/unauthorized'
 import Settings from './pages/settings'
 import { AuthProvider } from './utils/auth-context'
 import HomePage from './pages/home-page'
+import { NotFound } from './pages/not-found'
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path='/' element={<Navigate to='/library' />} />
-
           <Route path='/signup' element={<SignUp />} />
           <Route path='/signin' element={<SignIn />} />
           <Route path='/unauthorized' element={<Unauthorized />} />
@@ -31,6 +30,9 @@ function App() {
           <Route element={<RootLayout allowedRoles={['ROLE_ADMIN']} />}>
             <Route path='/settings' element={<Settings />} />
           </Route>
+
+          <Route path='/' element={<Navigate to='/library' />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

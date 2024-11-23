@@ -51,11 +51,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const decodedToken: { role: string; sub: string; exp: number } =
             jwtDecode(storedToken)
 
-          if (decodedToken.exp * 1000 < Date.now()) {
-            logout()
-            return
-          }
-
           setToken(storedToken)
           setRole(decodedToken.role)
           setUser(decodedToken.sub)

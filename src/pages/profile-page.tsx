@@ -1,6 +1,9 @@
 import axios, { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Text } from '../components/text/text'
+import { List } from '../components/list/list'
+import { BookProfilePage } from '../components/book-profile-panel/book-profile-panel'
 
 interface Profile {
   username: string
@@ -16,6 +19,7 @@ const ProfilePage = () => {
   const { username } = useParams()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -29,7 +33,7 @@ const ProfilePage = () => {
         const axiosError = err as AxiosError
         if (axiosError.response) {
           if (axiosError.response.status === 404) {
-            setError('User not found: ' + username)
+            navigate('/not-found')
           } else {
             setError('Failed to fetch profile')
           }
@@ -49,11 +53,30 @@ const ProfilePage = () => {
   return (
     <>
       {profile ? (
-        <div>
-          <h1>{profile.username}</h1>
-          {profile.books.map((book) => (
-            <h2 key={book.id}>{book.title}</h2>
-          ))}
+        <div className='mx-auto w-1/2'>
+          <Text className='mt-4 mb-28 text-3xl text-center font-semibold'>
+            {profile.username}
+          </Text>
+          {profile.books.length > 0 ? (
+            <>
+              <Text className='text-2xl ml-8'>Gelesene Bücher</Text>
+              <List className='w-full'>
+                {profile.books.map((book) => (
+                  <BookProfilePage key={book.id} book={book} />
+                ))}
+              </List>
+            </>
+          ) : (
+            <div className='flex flex-col items-center justify-center mt-8'>
+              <Text className='text-xl text-gray-600'>
+                Du hast keine Bücher gelesen
+              </Text>
+              <Text className='text-gray-500 mt-2'>
+                Bücher können jederzeit hinzugefügt werden, dann erscheinen sie
+                hier.
+              </Text>
+            </div>
+          )}
         </div>
       ) : (
         <div>Loading...</div>

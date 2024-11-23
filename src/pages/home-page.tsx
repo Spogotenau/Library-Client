@@ -15,7 +15,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       if (!token) {
-        setError('User not authenticated')
+        setError('Nutzer ist nicht authentifiziert')
         return
       }
 
@@ -27,7 +27,7 @@ const HomePage = () => {
         const bookIds = profilesResponse.data.books.map((book) => book.id)
         setIds(bookIds)
       } catch (err) {
-        setError('Failed to load user profile')
+        setError('Fehler beim laden')
         console.log(err)
       }
 
@@ -42,7 +42,7 @@ const HomePage = () => {
         )
         setBooks(response.data)
       } catch (err) {
-        setError('Failed to load books')
+        setError('Bücher laden fehlgeschlagen')
         console.log(err)
       }
     }
@@ -55,9 +55,11 @@ const HomePage = () => {
   }
 
   return (
-    <div className='flex flex-col items-center'>
-      <Text className='m-4 text-3xl font-semibold'>Alle Bücher</Text>
-      <div className='flex flex-col items-center w-1/2'>
+    <>
+      <div className='mx-auto w-1/2'>
+        <Text className='m-4 text-3xl font-semibold text-center'>
+          Alle Bücher
+        </Text>
         {books.length > 0 ? (
           <List className='w-full'>
             {books.map((book) => (
@@ -68,7 +70,7 @@ const HomePage = () => {
           <div>Loading...</div> // todo implement spinner
         )}
       </div>
-    </div>
+    </>
   )
 }
 

@@ -9,6 +9,7 @@ import { List } from '../components/list/list'
 import { Text } from '../components/text/text'
 import { InputNumber } from '../components/input-number/input-number'
 import InputText from '../components/input-text/input-text'
+import { ProfilePanel } from '../components/profile-panel/profile-panel'
 
 const Settings = () => {
   const { token } = useAuth()
@@ -100,11 +101,11 @@ const Settings = () => {
   }, [token])
 
   return (
-    <div className='flex flex-col items-center'>
-      <Text className='m-4 text-3xl font-semibold'>Settings</Text>
-      <div className='flex flex-col items-center w-2/3'>
+    <div className='ml-40'>
+      <Text className='m-4 text-3xl font-semibold'>Einstellungen</Text>
+      <div className='flex flex-col items-center w-2/3 mb-12'>
         <div className='flex justify-between w-full items-center'>
-          <Text className='text-2xl'>Bücher</Text>
+          <Text className='text-2xl ml-4'>Bücher</Text>
           <Button onClick={toggleModal}>Hinzufügen</Button>
         </div>
 
@@ -119,16 +120,16 @@ const Settings = () => {
         )}
       </div>
 
-      <div>
-        <Text className='ml-4 text-xl'>Profiles</Text>
+      <div className='flex flex-col items-center w-1/3'>
+        <Text className='text-2xl self-start ml-4'>Profile</Text>
         {profilesError ? (
           <div>{profilesError}</div>
         ) : (
-          <ul>
+          <List className='w-full'>
             {profiles.map((username) => (
-              <li key={username}>{username}</li>
+              <ProfilePanel key={username} username={username} />
             ))}
-          </ul>
+          </List>
         )}
       </div>
       <Modal

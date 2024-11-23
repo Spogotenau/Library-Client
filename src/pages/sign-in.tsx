@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import InputText from '../components/input-text/input-text'
 import Button from '../components/button/button'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/auth-context'
 import { Text } from '../components/text/text'
@@ -12,6 +12,7 @@ const SignIn = () => {
   const [isUsernameValid, setIsUsernameValid] = useState<boolean>(false)
   const [password, setPassword] = useState<string>('')
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   const navigate = useNavigate()
 
@@ -25,8 +26,17 @@ const SignIn = () => {
       localStorage.setItem('token', response.data)
       setCurrentUser(response.data)
       navigate('/')
-    } catch (error) {
-      console.error('Login error:', error)
+    } catch (err) {
+      const axiosError = err as AxiosError
+      if (axiosError.response) {
+        if (axiosError.response.status === 401) {
+          setError('Nutzername oder Passwort falsch')
+        } else {
+          setError('Anmeldung fehlgeschlagen')
+        }
+      } else {
+        setError('Network error or no response received')
+      }
     }
   }
 
@@ -46,10 +56,12 @@ const SignIn = () => {
             label='Passwort'
             required={true}
             value={password}
+            password={true}
             onChange={setPassword}
             setValid={setIsPasswordValid}
           />
         </div>
+        <Text className='text-red-500 font-semibold'>{error}</Text>
         <div className='mt-4 flex justify-between'>
           <Button
             onClick={loginUser}
