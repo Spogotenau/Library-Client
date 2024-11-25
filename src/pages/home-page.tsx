@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import { BookResponse } from '../interfaces/responses/book-response'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { useAuth } from '../utils/auth-context'
 import { List } from '../components/list/list'
 import { BookLibraryPanel } from '../components/book-library-panel/book-library-panel'
 import { Text } from '../components/text/text'
+import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {
   const [books, setBooks] = useState<BookResponse[]>([])
   const [ids, setIds] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const { token, user } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -27,8 +29,16 @@ const HomePage = () => {
         const bookIds = profilesResponse.data.books.map((book) => book.id)
         setIds(bookIds)
       } catch (err) {
-        setError('Fehler beim laden')
-        console.log(err)
+        const axiosError = err as AxiosError
+        if (axiosError.response) {
+          if (axiosError.response.status === 401) {
+            navigate('/signin')
+          } else {
+            setError('Bücher laden fehlgeschlagen')
+          }
+        } else {
+          setError('Network error or no response received')
+        }
       }
 
       try {
@@ -42,8 +52,16 @@ const HomePage = () => {
         )
         setBooks(response.data)
       } catch (err) {
-        setError('Bücher laden fehlgeschlagen')
-        console.log(err)
+        const axiosError = err as AxiosError
+        if (axiosError.response) {
+          if (axiosError.response.status === 401) {
+            navigate('/signin')
+          } else {
+            setError('Bücher laden fehlgeschlagen')
+          }
+        } else {
+          setError('Network error or no response received')
+        }
       }
     }
 

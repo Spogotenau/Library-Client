@@ -35,7 +35,7 @@ const ProfilePage = () => {
           if (axiosError.response.status === 404) {
             navigate('/not-found')
           } else {
-            setError('Failed to fetch profile')
+            setError('Laden des Profils fehlgeschlagen')
           }
         } else {
           setError('Network error or no response received')
